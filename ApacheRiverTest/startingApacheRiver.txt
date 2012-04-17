@@ -1,6 +1,0 @@
-When in the ApacheRiver directory /halo run the following commands:
-
-call scripts/httpd.bat
-call scripts/jrmp-reggie.bat
-call scripts/jrmp-outrigger-group.bat
-call scripts/jrmp-mahalo-group.bat
