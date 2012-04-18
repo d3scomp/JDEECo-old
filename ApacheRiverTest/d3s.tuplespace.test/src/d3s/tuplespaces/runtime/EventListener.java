@@ -1,6 +1,5 @@
 package d3s.tuplespaces.runtime;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +40,6 @@ class EventListener implements RemoteEventListener {
     }
 
     public void notify(RemoteEvent anEvent) {
-
         try {
         	List<String> rIds = new ArrayList<String>();
 			MatchSet readResult = space.contents(

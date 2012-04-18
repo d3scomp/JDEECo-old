@@ -8,18 +8,24 @@ import net.jini.space.JavaSpace05;
 
 public class TupleSpaceUtils {
 	protected final static Long DEFAULT_LEASE_TIMEOUT = 120000L; // 2 mins
+	private static JavaSpace05 space = null;
+	private static TransactionManager txManager = null;
 
 	public static Transaction createTransaction() throws Exception {
-		Lookup lookup = new Lookup(TransactionManager.class);
-		TransactionManager txManager = (TransactionManager) lookup.getService();
+		if (txManager == null) {
+			Lookup transactionLookup = new Lookup(TransactionManager.class);
+			txManager = (TransactionManager) transactionLookup.getService();
+		}
 		Transaction.Created trc = TransactionFactory.create(txManager,
 				DEFAULT_LEASE_TIMEOUT);
 		return trc.transaction;
 	}
 
 	public static JavaSpace05 getSpace() throws Exception {
-		Lookup lookup = new Lookup(JavaSpace05.class);
-		JavaSpace05 space = (JavaSpace05) lookup.getService();
+		if (space == null) {
+			Lookup lookup = new Lookup(JavaSpace05.class);
+			space = (JavaSpace05) lookup.getService();
+		}
 		return space;
 	}
 	
