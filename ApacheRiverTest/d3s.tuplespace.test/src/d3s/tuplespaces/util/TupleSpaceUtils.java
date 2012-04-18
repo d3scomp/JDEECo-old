@@ -11,7 +11,7 @@ public class TupleSpaceUtils {
 	private static JavaSpace05 space = null;
 	private static TransactionManager txManager = null;
 
-	public static Transaction createTransaction() throws Exception {
+	public static synchronized Transaction createTransaction() throws Exception {
 		if (txManager == null) {
 			Lookup transactionLookup = new Lookup(TransactionManager.class);
 			txManager = (TransactionManager) transactionLookup.getService();
@@ -21,7 +21,7 @@ public class TupleSpaceUtils {
 		return trc.transaction;
 	}
 
-	public static JavaSpace05 getSpace() throws Exception {
+	public static synchronized JavaSpace05 getSpace() throws Exception {
 		if (space == null) {
 			Lookup lookup = new Lookup(JavaSpace05.class);
 			space = (JavaSpace05) lookup.getService();
@@ -29,14 +29,14 @@ public class TupleSpaceUtils {
 		return space;
 	}
 	
-	public static Tuple createTuple(String key, Object value) {
+	public static synchronized Tuple createTuple(String key, Object value) {
 		Tuple result = new Tuple();
 		result.key = key;
 		result.value = value;
 		return result;
 	}
 	
-	public static Tuple createTemplate(String key) {
+	public static synchronized Tuple createTemplate(String key) {
 		Tuple result = new Tuple();
 		result.key = key;
 		return result;
