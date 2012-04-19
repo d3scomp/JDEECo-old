@@ -34,38 +34,49 @@ public class ComponentA extends Component {
 	@Override
 	protected AbstractProcess createProcess() {
 		AbstractProcess process = new AbstractProcess() {
-			
+
 			@Override
 			public void step() {
-				List<Tuple> inputKnowledge = readInputKnowledge();
-				if (inputKnowledge != null && inputKnowledge.size() == 3) {
-					Object others = inputKnowledge.get(0).value;
-					if (others != null) {
-						String path = (String) inputKnowledge.get(1).value;
-						Integer battery = (Integer) inputKnowledge.get(2).value;
-						battery--;
-						if (path.length() > 2)
-							path = path.substring(2);
-						else
-							path = "";
-						System.out.println("Moving robot A: " + path);
-						writeOutputKnowledge(new Object[]{path, battery});
-					} else {
-						System.out.println("A: No other robots");
+				try {
+					boolean commit = true;
+					Transaction tx = TupleSpaceUtils.createTransaction();
+					List<Tuple> inputKnowledge = readInputKnowledge(tx);
+					if (inputKnowledge != null && inputKnowledge.size() == 3) {
+						Object others = inputKnowledge.get(0).value;
+						if (others != null) {
+							String path = (String) inputKnowledge.get(1).value;
+							Integer battery = (Integer) inputKnowledge.get(2).value;
+							battery--;
+							if (path.length() > 2)
+								path = path.substring(2);
+							else
+								path = "";
+							System.out.println("Moving robot A: " + path);
+							commit = writeOutputKnowledge(
+									new Object[] { path, battery }, tx);
+						} else {
+							System.out.println("A: No other robots");
+						}
 					}
-					
+					if (commit)
+						tx.commit();
+					else
+						tx.abort();
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		};
-		process.inputProperties = new String[]{"A.others", "A.path", "A.battery"};
-		process.outputProperties = new String[]{"A.path", "A.battery"};
+		process.inputProperties = new String[] { "A.others", "A.path",
+				"A.battery" };
+		process.outputProperties = new String[] { "A.path", "A.battery" };
 		return process;
 	}
-	
+
 	public static void main(String args[]) {
 		if (System.getSecurityManager() == null)
-            System.setSecurityManager(new RMISecurityManager());
-		
+			System.setSecurityManager(new RMISecurityManager());
+
 		ComponentA c = new ComponentA();
 	}
 
