@@ -7,36 +7,43 @@ import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace05;
 
 public class TupleSpaceUtils {
-	protected final static Long DEFAULT_LEASE_TIMEOUT = 120000L; // 2 mins
+	protected final static Long DEFAULT_LEASE_TIMEOUT = 1L; // 3s
 	private static JavaSpace05 space = null;
 	private static TransactionManager txManager = null;
+	
+	private static Object spaceLock = new Object();
+	private static Object transactionLock = new Object();
 
-	public static synchronized Transaction createTransaction() throws Exception {
-		if (txManager == null) {
-			Lookup transactionLookup = new Lookup(TransactionManager.class);
-			txManager = (TransactionManager) transactionLookup.getService();
+	public static Transaction createTransaction() throws Exception {
+		synchronized (transactionLock) {
+			if (txManager == null) {
+				Lookup transactionLookup = new Lookup(TransactionManager.class);
+				txManager = (TransactionManager) transactionLookup.getService();
+			}
+			Transaction.Created trc = TransactionFactory.create(txManager,
+					DEFAULT_LEASE_TIMEOUT);
+			return trc.transaction;
 		}
-		Transaction.Created trc = TransactionFactory.create(txManager,
-				DEFAULT_LEASE_TIMEOUT);
-		return trc.transaction;
 	}
 
-	public static synchronized JavaSpace05 getSpace() throws Exception {
-		if (space == null) {
-			Lookup lookup = new Lookup(JavaSpace05.class);
-			space = (JavaSpace05) lookup.getService();
+	public static JavaSpace05 getSpace() throws Exception {
+		synchronized (spaceLock) {
+			if (space == null) {
+				Lookup lookup = new Lookup(JavaSpace05.class);
+				space = (JavaSpace05) lookup.getService();
+			}
+			return space;
 		}
-		return space;
 	}
 	
-	public static synchronized Tuple createTuple(String key, Object value) {
+	public static Tuple createTuple(String key, Object value) {
 		Tuple result = new Tuple();
 		result.key = key;
 		result.value = value;
 		return result;
 	}
 	
-	public static synchronized Tuple createTemplate(String key) {
+	public static Tuple createTemplate(String key) {
 		Tuple result = new Tuple();
 		result.key = key;
 		return result;

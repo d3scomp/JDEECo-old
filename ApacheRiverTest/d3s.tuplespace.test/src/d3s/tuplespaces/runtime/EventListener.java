@@ -42,8 +42,10 @@ class EventListener implements RemoteEventListener {
     public void notify(RemoteEvent anEvent) {
         try {
         	List<String> rIds = new ArrayList<String>();
+        	Transaction tx = TupleSpaceUtils
+					.createTransaction();
 			MatchSet readResult = space.contents(
-					Arrays.asList(TupleSpaceUtils.createTemplate("RobotId")), null,
+					Arrays.asList(TupleSpaceUtils.createTemplate("RobotId")), tx,
 					Lease.FOREVER, 100L);
 			Tuple t;
 			while ((t = (Tuple) readResult.next()) != null) {
@@ -51,8 +53,6 @@ class EventListener implements RemoteEventListener {
 			}
 			System.out.println("notified");
 			if (rIds.size() > 1) {
-				Transaction tx = TupleSpaceUtils
-						.createTransaction();
 				String id;
 				for (Integer i = 0; i < rIds.size(); i++) {
 					id = rIds.get(i);
@@ -68,6 +68,8 @@ class EventListener implements RemoteEventListener {
 					}
 				}
 				tx.commit();
+			} else {
+				tx.abort();
 			}
         } catch (Exception anE) {
             System.out.println("Got event but couldn't display it");
