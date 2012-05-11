@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * DEECoProcess is used to mark a method to be a component process.
+ * Used to mark a method to be a component process.
  * 
  * @author Michal Kit
  * 

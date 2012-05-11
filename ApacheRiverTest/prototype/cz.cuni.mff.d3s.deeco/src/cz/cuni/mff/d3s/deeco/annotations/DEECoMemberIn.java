@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * used when evaluating an ensemble. Such parameter will be retrieved but never
  * stored back to the knowledge repository.
  * 
- * The attribute "value" is dot separated absolute path, describing the nesting
+ * The attribute <code>value</code> is dot separated absolute path, describing the nesting
  * in the component knowledge for which matching should be performed.
  * 
  * @author Michal Kit

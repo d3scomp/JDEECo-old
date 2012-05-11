@@ -1,4 +1,4 @@
-package cz.cuni.mff.d3s.deeco.test;
+package cz.cuni.mff.d3s.deeco.demo;
 
 import java.rmi.RMISecurityManager;
 import java.util.Arrays;

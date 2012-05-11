@@ -1,7 +1,8 @@
 package cz.cuni.mff.d3s.deeco.exceptions;
 
 /**
- * KMException is the base class for the the Knowledge Manager related errors.
+ * KMException is the base class for the the Knowledge Manager related
+ * exceptions.
  * 
  * @author Michal Kit
  * 

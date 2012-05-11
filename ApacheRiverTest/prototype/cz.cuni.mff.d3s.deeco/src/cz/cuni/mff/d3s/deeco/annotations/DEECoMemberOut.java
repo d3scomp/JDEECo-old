@@ -6,13 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * DEECoMemberOut is used to mark a method parameter as a member output
- * parameter for ensemble evaluation. Such parameter will be instantiated by the
- * system and passed to the method for invocation. After the method execution it
- * will be stored in the knowledge repository.
+ * Used to mark a method parameter as a member output parameter for ensemble
+ * evaluation. Such parameter will be instantiated by the system and passed to
+ * the method for invocation. After the method execution it will be stored in
+ * the knowledge repository.
  * 
- * The attribute "value" is dot separated absolute path, describing the nesting
- * in the component knowledge for which matching should be performed.
+ * The attribute <code>value</code> is dot separated absolute path, describing
+ * the nesting in the component knowledge for which matching should be
+ * performed.
  * 
  * @author Michal Kit
  * 

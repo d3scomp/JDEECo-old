@@ -1,8 +1,8 @@
 package cz.cuni.mff.d3s.deeco.exceptions;
 
 /**
- * KMIllegalArgumentException is thrown whenever there is a type matching
- * related problem, while retrieving knowledge.
+ * Thrown whenever there is a type matching related problem, while retrieving
+ * knowledge the knowledge repository.
  * 
  * @author Michal Kit
  * 

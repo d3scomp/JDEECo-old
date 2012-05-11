@@ -1,8 +1,8 @@
 package cz.cuni.mff.d3s.deeco.exceptions;
 
 /**
- * KMNotExistentException is thrown whenever the knowledge manager is unable to
- * retreive required property in the knowledge structure.
+ * Thrown whenever the knowledge manager is unable to retreive required property
+ * for the knowledge structure.
  * 
  * @author Michal Kit
  * 

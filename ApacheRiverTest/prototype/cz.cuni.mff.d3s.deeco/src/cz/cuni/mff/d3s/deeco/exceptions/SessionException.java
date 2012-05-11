@@ -3,7 +3,7 @@ package cz.cuni.mff.d3s.deeco.exceptions;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
 
 /**
- * SessionException is thrown whenever there is a session related problem.
+ * Thrown whenever there is a session related problem.
  * @see ISession
  * 
  * @author Michal Kit

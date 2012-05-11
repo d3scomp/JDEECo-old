@@ -1,8 +1,5 @@
 package cz.cuni.mff.d3s.deeco.knowledge;
 
-import net.jini.core.transaction.Transaction;
-import net.jini.core.transaction.TransactionFactory;
-import net.jini.core.transaction.server.TransactionManager;
 import net.jini.space.JavaSpace05;
 
 public class TSUtils {

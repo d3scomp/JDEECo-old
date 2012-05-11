@@ -5,10 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * DEECoTriggeredScheduling is used to mark an ensemble class or a component
- * process to be event triggered. (Not used currently)
+ * Used to mark an ensemble class or a component process to be event triggered.
+ * (Not used currently)
  * 
  * @author Michal Kit
  * 

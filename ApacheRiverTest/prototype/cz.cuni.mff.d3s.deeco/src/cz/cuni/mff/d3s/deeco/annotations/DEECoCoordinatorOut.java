@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * by the system and passed to the method for invocation. After the method
  * execution it will be stored in the knowledge repository.
  * 
- * The attribute "value" is dot separated absolute path, describing the nesting
+ * The attribute <code>value</code> is dot separated absolute path, describing the nesting
  * in the component knowledge for which matching should be performed.
  * 
  * @author Michal Kit

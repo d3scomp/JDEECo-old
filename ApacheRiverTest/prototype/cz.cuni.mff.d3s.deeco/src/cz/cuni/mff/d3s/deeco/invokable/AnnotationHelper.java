@@ -18,8 +18,8 @@ import cz.cuni.mff.d3s.deeco.annotations.IValuedAnnotation;
 public class AnnotationHelper {
 
 	/**
-	 * Searches for annotation instance of the type "annotationClass" in the
-	 * array of annotations.
+	 * Searches for annotation instance of the type specified by
+	 * <code>annotationClass</code> in the array of annotations.
 	 * 
 	 * @param annotationClass
 	 *            type of the annotation to be searched for.
@@ -41,7 +41,8 @@ public class AnnotationHelper {
 	 * Returns list of methods in the class definition which are annotated with
 	 * the given annotation class.
 	 * 
-	 * @param c class definition to be parsed
+	 * @param c
+	 *            class definition to be parsed
 	 * @param annotationClass
 	 *            class of annotation that should be considered during the
 	 *            parsing
@@ -61,10 +62,11 @@ public class AnnotationHelper {
 	}
 
 	/**
-	 * Returns a method in the class definition which are annotated with
-	 * the given annotation class.
+	 * Returns a method in the class definition which is annotated with the
+	 * given annotation class.
 	 * 
-	 * @param c class definition to be parsed
+	 * @param c
+	 *            class definition to be parsed
 	 * @param annotationClass
 	 *            class of annotation that should be considered during the
 	 *            parsing
@@ -86,12 +88,16 @@ public class AnnotationHelper {
 	}
 
 	/**
-	 * Returns list of method parameters, which are annotated with the given annotation class.
+	 * Returns list of method parameters, which are annotated with the given
+	 * annotation class.
 	 * 
-	 * @param method Method object that needs to be parsed
-	 * @param annotationClass class of annotation that should be considered during the
+	 * @param method
+	 *            Method object that needs to be parsed
+	 * @param annotationClass
+	 *            class of annotation that should be considered during the
 	 *            parsing
-	 * @return list of {@link Parameter} instances which fulfills search criteria.
+	 * @return list of {@link Parameter} instances which fulfills search
+	 *         criteria.
 	 * 
 	 * @see Parameter
 	 */

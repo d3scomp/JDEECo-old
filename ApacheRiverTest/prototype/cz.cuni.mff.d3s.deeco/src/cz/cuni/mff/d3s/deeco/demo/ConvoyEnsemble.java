@@ -1,4 +1,4 @@
-package cz.cuni.mff.d3s.deeco.test;
+package cz.cuni.mff.d3s.deeco.demo;
 
 import cz.cuni.mff.d3s.deeco.annotations.DEECoCoordinatorIn;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoEnsemble;
@@ -6,7 +6,6 @@ import cz.cuni.mff.d3s.deeco.annotations.DEECoEnsembleMapper;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoEnsembleMembership;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoMemberIn;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoMemberOut;
-import cz.cuni.mff.d3s.deeco.knowledge.RootKnowledge;
 
 @DEECoEnsemble
 public class ConvoyEnsemble {

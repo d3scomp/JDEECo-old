@@ -7,6 +7,12 @@ import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessIn;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessInOut;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessOut;
 
+/**
+ * Class representing component process method.
+ * 
+ * @author Michal Kit
+ * 
+ */
 public class ProcessParametrizedMethod extends ParameterizedMethod {
 	public String root;
 	public List<Parameter> in;
@@ -18,6 +24,13 @@ public class ProcessParametrizedMethod extends ParameterizedMethod {
 		this.root = root;
 	}
 
+	/**
+	 * Invokes process method execution.
+	 * 
+	 * @param parameters
+	 *            list of method parameters
+	 * @return invocation result or null in case of an exception.
+	 */
 	public Object invoke(Object[] parameters) {
 		try {
 			return method.invoke(null, parameters);
@@ -27,6 +40,18 @@ public class ProcessParametrizedMethod extends ParameterizedMethod {
 		}
 	}
 
+	/**
+	 * Static utility function used to extract {@link ProcessParametrizedMethod}
+	 * instance from a given method.
+	 * 
+	 * @param method
+	 *            method that needs to be parsed
+	 * @param root
+	 *            component knowledge id for which process method performs its
+	 *            execution
+	 * @return {@link ProcessParametrizedMethod} instance or null in case of
+	 *         parsing error
+	 */
 	public static synchronized ProcessParametrizedMethod extractParametrizedMethod(
 			Method method, String root) {
 		ProcessParametrizedMethod result = null;

@@ -12,6 +12,12 @@ import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessSchedule;
 import cz.cuni.mff.d3s.deeco.scheduling.ScheduleHelper;
 
+/**
+ * Class representing a component process.
+ * 
+ * @author Michal Kit
+ * 
+ */
 public class SchedulableKnowledgeProcess extends SchedulableProcess {
 
 	private ProcessParametrizedMethod process;
@@ -22,6 +28,11 @@ public class SchedulableKnowledgeProcess extends SchedulableProcess {
 		this.process = process;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cz.cuni.mff.d3s.deeco.invokable.SchedulableProcess#invoke()
+	 */
 	@Override
 	protected void invoke() {
 		try {
@@ -35,6 +46,20 @@ public class SchedulableKnowledgeProcess extends SchedulableProcess {
 		}
 	}
 
+	/**
+	 * Static function used to extract {@link SchedulableKnowledgeProcess}
+	 * instance from the class definition
+	 * 
+	 * @param c
+	 *            class to be parsed for extraction
+	 * @param root
+	 *            component id for which process executes
+	 * @param km
+	 *            {@link KnowledgeManager} instance that is used for knowledge
+	 *            repository communication
+	 * @return list of {@link SchedulableKnowledgeProcess} instances extracted
+	 *         from the class definition
+	 */
 	public static List<SchedulableKnowledgeProcess> extractKnowledgeProcesses(
 			Class c, String root, KnowledgeManager km) {
 		List<SchedulableKnowledgeProcess> result = null;
