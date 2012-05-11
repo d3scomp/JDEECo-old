@@ -1,8 +1,7 @@
 package cz.cuni.mff.d3s.deeco.test;
 
-import cz.cuni.mff.d3s.deeco.knowledge.Knowledge;
 
-public class Path extends Knowledge {
+public class Path {
 	public Integer currentPosition;
 	public String remainingPath;
 

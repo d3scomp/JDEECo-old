@@ -5,11 +5,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cz.cuni.mff.d3s.deeco.staticTypes.EnumTransaction;
-
-
+/**
+ * DEECoProcess is used to mark a method to be a component process.
+ * 
+ * @author Michal Kit
+ * 
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface DEECoProcess {
-	EnumTransaction transactionType() default EnumTransaction.WEAK;
 }

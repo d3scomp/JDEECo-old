@@ -2,14 +2,14 @@ package cz.cuni.mff.d3s.deeco.test;
 
 import cz.cuni.mff.d3s.deeco.annotations.DEECoComponent;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoInitialize;
-import cz.cuni.mff.d3s.deeco.annotations.DEECoInputOutput;
+import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessInOut;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoPeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoProcess;
-import cz.cuni.mff.d3s.deeco.knowledge.Knowledge;
-import cz.cuni.mff.d3s.deeco.primitives.MutableInteger;
+import cz.cuni.mff.d3s.deeco.knowledge.RootKnowledge;
+import cz.cuni.mff.d3s.deeco.typeholders.MutableInteger;
 
 @DEECoComponent
-public class RobotLeaderComponent extends Knowledge {
+public class RobotLeaderComponent extends RootKnowledge {
 
 	public MutableInteger battery;
 	public Path path;
@@ -17,7 +17,7 @@ public class RobotLeaderComponent extends Knowledge {
 	public Path[] crossingRobots;
 
 	@DEECoInitialize
-	public static Knowledge getInitialKnowledge() {
+	public static RootKnowledge getInitialKnowledge() {
 		RobotLeaderComponent k = new RobotLeaderComponent();
 		k.battery = new MutableInteger(new Integer(100));
 		k.path = new Path();
@@ -31,10 +31,10 @@ public class RobotLeaderComponent extends Knowledge {
 	/*
 	 * Input: path, crossingRobots, convoyRobot Output: path
 	 */
-	@DEECoPeriodicScheduling(interval = 1500)
+	@DEECoPeriodicScheduling(1500)
 	@DEECoProcess
-	public static void process(@DEECoInputOutput(name = "path") Path path,
-			@DEECoInputOutput(name = "battery") MutableInteger battery) {
+	public static void process(@DEECoProcessInOut("path") Path path,
+			@DEECoProcessInOut("battery") MutableInteger battery) {
 		if (path.remainingPath.length() > 0) {
 			String[] fields = path.remainingPath.split(",");
 			if (fields.length > 0) {

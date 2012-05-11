@@ -2,7 +2,7 @@ package cz.cuni.mff.d3s.deeco.ducktype;
 
 import java.lang.reflect.Field;
 
-import cz.cuni.mff.d3s.deeco.knowledge.Knowledge;
+import cz.cuni.mff.d3s.deeco.knowledge.RootKnowledge;
 
 public class DuckType {
 	public static boolean interfaceMatchesKnowledge(Class interfaceClass,
@@ -21,15 +21,16 @@ public class DuckType {
 		return true;
 	}
 
-	public static Knowledge getInterfacedKnowledge(Class interfaceClass,
-			Knowledge knowledge) {
+	public static RootKnowledge getInterfacedKnowledge(Class interfaceClass,
+			RootKnowledge knowledge) {
 		try {
-			Knowledge result = null;
+			RootKnowledge result = null;
 			Class knowledgeClass = knowledge.getClass();
-			if (Knowledge.class.isAssignableFrom(interfaceClass)) {
-				result = (Knowledge) interfaceClass.newInstance();
+			if (RootKnowledge.class.isAssignableFrom(interfaceClass)) {
+				result = (RootKnowledge) interfaceClass.newInstance();
 				for (Field field : interfaceClass.getFields()) {
-					field.set(result, knowledgeClass.getField(field.getName()).get(knowledge));
+					field.set(result, knowledgeClass.getField(field.getName())
+							.get(knowledge));
 				}
 			}
 			return result;

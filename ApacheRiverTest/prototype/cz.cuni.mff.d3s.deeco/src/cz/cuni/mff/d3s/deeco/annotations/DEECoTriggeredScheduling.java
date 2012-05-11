@@ -5,9 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import cz.cuni.mff.d3s.deeco.staticTypes.EnumScheduling;
 
-
+/**
+ * DEECoTriggeredScheduling is used to mark an ensemble class or a component
+ * process to be event triggered. (Not used currently)
+ * 
+ * @author Michal Kit
+ * 
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface DEECoTriggeredScheduling {

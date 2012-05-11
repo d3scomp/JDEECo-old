@@ -2,15 +2,15 @@ package cz.cuni.mff.d3s.deeco.test;
 
 import cz.cuni.mff.d3s.deeco.annotations.DEECoComponent;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoInitialize;
-import cz.cuni.mff.d3s.deeco.annotations.DEECoInput;
-import cz.cuni.mff.d3s.deeco.annotations.DEECoInputOutput;
+import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessIn;
+import cz.cuni.mff.d3s.deeco.annotations.DEECoProcessInOut;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoPeriodicScheduling;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoProcess;
-import cz.cuni.mff.d3s.deeco.knowledge.Knowledge;
-import cz.cuni.mff.d3s.deeco.primitives.MutableInteger;
+import cz.cuni.mff.d3s.deeco.knowledge.RootKnowledge;
+import cz.cuni.mff.d3s.deeco.typeholders.MutableInteger;
 
 @DEECoComponent
-public class RobotFollowerComponent extends Knowledge {
+public class RobotFollowerComponent extends RootKnowledge {
 
 	public MutableInteger battery;
 	public Path path;
@@ -18,7 +18,7 @@ public class RobotFollowerComponent extends Knowledge {
 	public Path[] crossingRobots;
 
 	@DEECoInitialize
-	public static Knowledge getInitialKnowledge() {
+	public static RootKnowledge getInitialKnowledge() {
 		RobotFollowerComponent k = new RobotFollowerComponent();
 		k.battery = new MutableInteger(new Integer(100));
 		k.path = new Path();
@@ -30,10 +30,10 @@ public class RobotFollowerComponent extends Knowledge {
 	}
 
 	@DEECoProcess
-	@DEECoPeriodicScheduling(interval = 500)
-	public static void process(@DEECoInputOutput(name = "path") Path path,
-			@DEECoInputOutput(name = "battery") MutableInteger battery,
-			@DEECoInput(name = "convoyRobot") String convoyRobot) {
+	@DEECoPeriodicScheduling(500)
+	public static void process(@DEECoProcessInOut("path") Path path,
+			@DEECoProcessInOut("battery") MutableInteger battery,
+			@DEECoProcessIn("convoyRobot") String convoyRobot) {
 		if (convoyRobot != null && path.remainingPath.length() > 0) {
 			String[] fields = path.remainingPath.split(",");
 			if (fields.length > 0) {
