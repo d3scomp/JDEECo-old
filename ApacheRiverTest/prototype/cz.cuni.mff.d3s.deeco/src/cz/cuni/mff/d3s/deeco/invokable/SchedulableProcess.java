@@ -11,6 +11,12 @@ import cz.cuni.mff.d3s.deeco.knowledge.KnowledgePathBuilder;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessPeriodicSchedule;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessSchedule;
 
+/**
+ * Base class defining common functionalities for all schedulable processes.
+ * 
+ * @author Michal Kit
+ * 
+ */
 public abstract class SchedulableProcess {
 
 	private Thread processThread;
@@ -24,12 +30,69 @@ public abstract class SchedulableProcess {
 		this.km = km;
 	}
 
+	/**
+	 * Function used by the processes to retrieve all required parameters
+	 * necessary for process method execution.
+	 * 
+	 * @param in
+	 *            list of the input parameters. Those are retrieved from the
+	 *            knowledge manager.
+	 * @param out
+	 *            list of the output parameters. Those are instantiated
+	 *            according to the types and passed to the method. When the
+	 *            process method execution finishes they are stored by the
+	 *            knowledge manager.
+	 * @param inOut
+	 *            list of parameters which are both input and output. Those are
+	 *            retrieved from the knowledge manager before process execution
+	 *            and stored back when it finishes.
+	 * @param root
+	 *            knowledge level for which parameters should be retrieved or
+	 *            stored.
+	 * @return An array of parameter instances
+	 * @throws KMNotExistentException
+	 *             thrown whenever required input parameter is not available in
+	 *             the knowledge repository
+	 * @throws KMIllegalArgumentException
+	 *             thrown whenever there is type conflict between the required
+	 *             parameter and the one stored in the knowledge repository
+	 */
 	protected Object[] getParameterMethodValues(List<Parameter> in,
 			List<Parameter> out, List<Parameter> inOut, String root)
 			throws KMNotExistentException, KMIllegalArgumentException {
 		return getParameterMethodValues(in, out, inOut, root, null);
 	}
 
+	/**
+	 * Function used by the processes to retrieve all required parameters
+	 * necessary for process method execution. This version is session oriented.
+	 * 
+	 * @param in
+	 *            list of the input parameters. Those are retrieved from the
+	 *            knowledge manager.
+	 * @param out
+	 *            list of the output parameters. Those are instantiated
+	 *            according to the types and passed to the method. When the
+	 *            process method execution finishes they are stored by the
+	 *            knowledge manager.
+	 * @param inOut
+	 *            list of parameters which are both input and output. Those are
+	 *            retrieved from the knowledge manager before process execution
+	 *            and stored back when it finishes.
+	 * @param root
+	 *            knowledge level for which parameters should be retrieved or
+	 *            stored.
+	 * @param session
+	 *            session instance within which all the retrieval operations
+	 *            should be performed.
+	 * @return An array of parameter instances
+	 * @throws KMNotExistentException
+	 *             thrown whenever required input parameter is not available in
+	 *             the knowledge repository
+	 * @throws KMIllegalArgumentException
+	 *             thrown whenever there is type conflict between the required
+	 *             parameter and the one stored in the knowledge repository
+	 */
 	protected Object[] getParameterMethodValues(List<Parameter> in,
 			List<Parameter> out, List<Parameter> inOut, String root,
 			ISession session) throws KMNotExistentException,
@@ -39,7 +102,8 @@ public abstract class SchedulableProcess {
 		List<Parameter> parameters = new ArrayList<Parameter>();
 		parameters.addAll(in);
 		parameters.addAll(inOut);
-		Object[] result = new Object[parameters.size() + out.size()];
+		Object[] result = new Object[parameters.size()
+				+ ((out != null) ? out.size() : 0)];
 		try {
 			while (!localSession.repeat()) {
 				localSession.begin();
@@ -67,11 +131,40 @@ public abstract class SchedulableProcess {
 		}
 	}
 
+	/**
+	 * Function used to store computed values during the process method
+	 * execution in the knowledge repository.
+	 * 
+	 * @param parameterValues
+	 *            list of method all parameters
+	 * @param out
+	 *            list of output parameter descriptions
+	 * @param inOut
+	 *            list of both output and input parameter descriptions
+	 * @param root
+	 *            knowledge level for which parameters should stored.
+	 */
 	protected void putParameterMethodValues(Object[] parameterValues,
 			List<Parameter> out, List<Parameter> inOut, String root) {
 		putParameterMethodValues(parameterValues, out, inOut, root, null);
 	}
 
+	/**
+	 * Function used to store computed values during the process method
+	 * execution in the knowledge repository. This version is session oriented.
+	 * 
+	 * @param parameterValues
+	 *            list of method all parameters
+	 * @param out
+	 *            list of output parameter descriptions
+	 * @param inOut
+	 *            list of both output and input parameter descriptions
+	 * @param root
+	 *            knowledge level for which parameters should stored
+	 * @param session
+	 *            session instance within which all the storing operations
+	 *            should be performed.
+	 */
 	protected void putParameterMethodValues(Object[] parameterValues,
 			List<Parameter> out, List<Parameter> inOut, String root,
 			ISession session) {
@@ -105,8 +198,16 @@ public abstract class SchedulableProcess {
 		}
 	}
 
+	/**
+	 * Function invokes single process execution.
+	 */
 	protected abstract void invoke();
 
+	/**
+	 * Function starts the process execution. In case its scheduling is periodic
+	 * it creates a thread within which it invokes process execution
+	 * periodically.
+	 */
 	public void start() {
 		final ProcessPeriodicSchedule s = (ProcessPeriodicSchedule) scheduling;
 		if (s != null) {
@@ -131,8 +232,9 @@ public abstract class SchedulableProcess {
 		}
 	}
 
-	/*
-	 * To be changed later
+	/**
+	 * Stops the process execution. In case its scheduling is periodic it
+	 * interrupts the thread.
 	 */
 	public void stop() {
 		if (processThread != null) {

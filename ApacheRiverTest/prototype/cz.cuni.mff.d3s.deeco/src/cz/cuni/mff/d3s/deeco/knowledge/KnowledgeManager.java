@@ -2,44 +2,170 @@ package cz.cuni.mff.d3s.deeco.knowledge;
 
 import cz.cuni.mff.d3s.deeco.exceptions.KMException;
 
-
+/**
+ * An abstract class providing higher level interface for accessing the
+ * knowledge repository.
+ * 
+ * @author Michal Kit
+ * 
+ */
 public abstract class KnowledgeManager {
-	
-	public abstract Object getKnowledge(String knowledgePath, Class structure, ISession session) throws KMException;
-	
-	public abstract void putKnowledge(String knowledgePath, Object value, ISession session) throws KMException;
-	
-	public abstract Object takeKnowledge(String knowledgePath, Class structure, ISession session) throws KMException;
-	
-	public abstract String [] findAllProperties(String knowledgePath, ISession session);
-	
+
+	/**
+	 * Retrieves knowledge from the knowledge repository, defined by both
+	 * knowledgePath and structure. This method is session oriented.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge structure should be rooted
+	 * @param structure
+	 *            Knowledge structure (Knowledge Interface)
+	 * @param session
+	 *            a session object within which all the retrieval should be
+	 *            performed
+	 * @return retrieved knowledge object of type structure
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public abstract Object getKnowledge(String knowledgePath, Class structure,
+			ISession session) throws KMException;
+
+	/**
+	 * Puts knowledge object to the knowledge repository. This method is session
+	 * oriented.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge object should be stored
+	 * @param value
+	 *            knowledge to be stored
+	 * @param session
+	 *            a session object within which all the put operations should be
+	 *            performed
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public abstract void putKnowledge(String knowledgePath, Object value,
+			ISession session) throws KMException;
+
+	/**
+	 * Withdraws the knowledge from the knowledge repository. This method is
+	 * session oriented.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge structure should be rooted
+	 * @param structure
+	 *            Knowledge structure (Knowledge Interface)
+	 * @param session
+	 *            a session object within which all the withdrawals should be
+	 *            performed
+	 * @return retrieved knowledge object of type structure
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public abstract Object takeKnowledge(String knowledgePath, Class structure,
+			ISession session) throws KMException;
+
+	/**
+	 * Function tries to find all the flat (not hierarchical structures)
+	 * properties in the knowledge repository. This method is session oriented.
+	 * 
+	 * @param knowledgePath
+	 *            absolute name (knowledge path) of the property
+	 * @param session
+	 *            a session object within which finding should be performed
+	 * @return an array of matched objects
+	 */
+	public abstract String[] findAllProperties(String knowledgePath,
+			ISession session);
+
+	/**
+	 * Creates {@link ISession} object instance.
+	 * 
+	 * @return {@link ISession} object instance.
+	 */
 	public abstract ISession createSession();
-	
-	public Object getKnowledge(String knowledgePath, Class structure) throws KMException  {
-		return  getKnowledge(knowledgePath, structure, null);
+
+	/**
+	 * Retrieves knowledge from the knowledge repository, defined by both
+	 * knowledgePath and structure.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge structure should be rooted
+	 * @param structure
+	 *            Knowledge structure (Knowledge Interface)
+	 * @return retrieved knowledge object of type structure
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public Object getKnowledge(String knowledgePath, Class structure)
+			throws KMException {
+		return getKnowledge(knowledgePath, structure, null);
 	}
-	
-	public void putKnowledge(String knowledgePath, Object value) throws KMException {
+
+	/**
+	 * Puts knowledge object to the knowledge repository.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge object should be stored
+	 * @param value
+	 *            knowledge to be stored
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public void putKnowledge(String knowledgePath, Object value)
+			throws KMException {
 		putKnowledge(knowledgePath, value, null);
 	}
-	
-	public Object takeKnowledge(String knowledgePath, Class structure) throws KMException {
+
+	/**
+	 * Withdraws the knowledge from the knowledge repository.
+	 * 
+	 * @param knowledgePath
+	 *            nesting at which the knowledge structure should be rooted
+	 * @param structure
+	 *            Knowledge structure (Knowledge Interface)
+	 * @return retrieved knowledge object of type structure
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
+	public Object takeKnowledge(String knowledgePath, Class structure)
+			throws KMException {
 		return takeKnowledge(knowledgePath, structure, null);
 	}
-	
+
+	/**
+	 * Retrieves knowledge from the knowledge repository, defined by
+	 * knowledgePath.
+	 * 
+	 * @param absolute
+	 *            name (knowledge path) of the property to be retrieved
+	 * @return retrieved knowledge object
+	 * @throws KMException
+	 *             thrown whenever there is a problem accessing the knowledge
+	 *             repository
+	 */
 	public Object getKnowledge(String knowledgePath) throws KMException {
-		return  getKnowledge(knowledgePath, null);
+		return getKnowledge(knowledgePath, null);
 	}
-	
-	public void putKnowledge(String knowledgePath) throws KMException {
-		putKnowledge(knowledgePath, null);
-	}
-	
+
 	public Object takeKnowledge(String knowledgePath) throws KMException {
 		return takeKnowledge(knowledgePath, null);
 	}
-	
-	public String [] findAllProperties(String knowledgePath) {
+
+	/**
+	 * Function tries to find all the flat (not hierarchical structures)
+	 * properties in the knowledge repository.
+	 * 
+	 * @param knowledgePath
+	 *            absolute name (knowledge path) of the property
+	 * @return an array of matched objects
+	 */
+	public String[] findAllProperties(String knowledgePath) {
 		return findAllProperties(knowledgePath, null);
 	}
 }

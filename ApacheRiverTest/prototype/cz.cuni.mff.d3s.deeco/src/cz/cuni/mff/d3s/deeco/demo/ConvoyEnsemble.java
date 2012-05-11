@@ -1,4 +1,4 @@
-package cz.cuni.mff.d3s.deeco.test;
+package cz.cuni.mff.d3s.deeco.demo;
 
 import cz.cuni.mff.d3s.deeco.annotations.DEECoCoordinatorIn;
 import cz.cuni.mff.d3s.deeco.annotations.DEECoEnsemble;

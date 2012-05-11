@@ -14,6 +14,13 @@ import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessSchedule;
 import cz.cuni.mff.d3s.deeco.scheduling.ScheduleHelper;
 
+/**
+ * Class representing schedulable ensemble process, which is used by the system
+ * to perform either triggered or periodic ensembling.
+ * 
+ * @author Michal Kit
+ * 
+ */
 public class SchedulableEnsembleProcess extends SchedulableProcess {
 
 	private EnsembleParametrizedMethod mapper;
@@ -32,6 +39,11 @@ public class SchedulableEnsembleProcess extends SchedulableProcess {
 		this.mapper = mapper;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see cz.cuni.mff.d3s.deeco.invokable.SchedulableProcess#invoke()
+	 */
 	@Override
 	protected void invoke() {
 		ISession session = km.createSession();
@@ -57,7 +69,8 @@ public class SchedulableEnsembleProcess extends SchedulableProcess {
 								membership.coordinatorIn,
 								membership.coordinatorOut,
 								membership.coordinatorInOut, oid);
-					} catch (KMIllegalArgumentException | KMNotExistentException knee) {
+					} catch (KMIllegalArgumentException
+							| KMNotExistentException knee) {
 						try {
 							coordinatorSession.cancel();
 						} catch (SessionException se) {
@@ -74,7 +87,8 @@ public class SchedulableEnsembleProcess extends SchedulableProcess {
 										membership.memberInOut, iid);
 								evaluateEnsemble(memberParams,
 										coordinatorParams);
-							} catch (KMIllegalArgumentException | KMNotExistentException knee) {
+							} catch (KMIllegalArgumentException
+									| KMNotExistentException knee) {
 								try {
 									memberSession.cancel();
 								} catch (SessionException se) {
@@ -107,7 +121,20 @@ public class SchedulableEnsembleProcess extends SchedulableProcess {
 		}
 	}
 
-	public static SchedulableEnsembleProcess extractEnsembleProcesses(Class c, KnowledgeManager km) {
+	/**
+	 * Static function used to extract {@link SchedulableEnsembleProcess}
+	 * instance from the class definition
+	 * 
+	 * @param c
+	 *            class to be parsed for extraction
+	 * @param km
+	 *            {@link KnowledgeManager} instance that is used for knowledge
+	 *            repository communication
+	 * @return list of {@link SchedulableEnsembleProcess} instances extracted
+	 *         from the class definition
+	 */
+	public static SchedulableEnsembleProcess extractEnsembleProcesses(Class c,
+			KnowledgeManager km) {
 		SchedulableEnsembleProcess result = null;
 		if (c != null) {
 			result = new SchedulableEnsembleProcess(
