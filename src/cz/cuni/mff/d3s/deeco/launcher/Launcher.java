@@ -1,8 +1,8 @@
 package cz.cuni.mff.d3s.deeco.launcher;
 
-import cz.cuni.mff.d3s.deeco.demo.ConvoyEnsemble;
-import cz.cuni.mff.d3s.deeco.demo.RobotFollowerComponent;
-import cz.cuni.mff.d3s.deeco.demo.RobotLeaderComponent;
+import cz.cuni.mff.d3s.deeco.demo.convoy.ConvoyEnsemble;
+import cz.cuni.mff.d3s.deeco.demo.convoy.RobotFollowerComponent;
+import cz.cuni.mff.d3s.deeco.demo.convoy.RobotLeaderComponent;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
 import cz.cuni.mff.d3s.deeco.knowledge.RepositoryKnowledgeManager;
 import cz.cuni.mff.d3s.deeco.knowledge.TSKnowledgeRepository;
