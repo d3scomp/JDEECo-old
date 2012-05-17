@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012 Charles University in Prague
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package cz.cuni.mff.d3s.deeco.invokable;
 
 import java.lang.reflect.Method;
@@ -31,47 +46,8 @@ public class EnsembleParametrizedMethod extends ParameterizedMethod {
 		super(method);
 	}
 
-	/**
-	 * Function invokes the method and returns the result of that invocation.
-	 * 
-	 * @param memberParameters
-	 *            method parameters marked as {@link DEECoMemberIn},
-	 *            {@link DEECoMemberOut} or {@link DEECoMemberInOut}
-	 * @param coordinatorParameters
-	 *            method parameters marked as {@link DEECoCoordinatorIn},
-	 *            {@link DEECoCoordinatorOut} or {@link DEECoCoordinatorInOut}
-	 * @return method invocation result
-	 */
-	public Object invoke(Object[] memberParameters,
-			Object[] coordinatorParameters) {
+	public Object invoke(Object[] parameters) {
 		try {
-			Object[] parameters = null;
-			List<Parameter> memberCombined = null, coordinatorCombined = null;
-			if (memberParameters != null && coordinatorParameters != null) {
-				parameters = new Object[memberParameters.length
-						+ coordinatorParameters.length];
-				memberCombined = getCombined(memberIn, memberOut, memberInOut);
-				coordinatorCombined = getCombined(coordinatorIn,
-						coordinatorOut, coordinatorInOut);
-			} else if (memberParameters != null) {
-				parameters = new Object[memberParameters.length];
-				memberCombined = getCombined(memberIn, memberOut, memberInOut);
-			} else if (coordinatorParameters != null) {
-				parameters = new Object[coordinatorParameters.length];
-				coordinatorCombined = getCombined(coordinatorIn,
-						coordinatorOut, coordinatorInOut);
-			}
-			Parameter dp;
-			if (memberCombined != null)
-				for (int i = 0; i < memberCombined.size(); i++) {
-					dp = memberCombined.get(i);
-					parameters[dp.index] = memberParameters[i];
-				}
-			if (coordinatorCombined != null)
-				for (int i = 0; i < coordinatorCombined.size(); i++) {
-					dp = coordinatorCombined.get(i);
-					parameters[dp.index] = coordinatorParameters[i];
-				}
 			return method.invoke(null, parameters);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

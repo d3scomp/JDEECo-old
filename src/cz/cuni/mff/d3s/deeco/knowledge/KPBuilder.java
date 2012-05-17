@@ -13,25 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package cz.cuni.mff.d3s.deeco.annotations;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package cz.cuni.mff.d3s.deeco.knowledge;
 
 /**
- * Used to mark an ensemble class or a component process to be executed
- * periodically.
- * 
- * The attribute <code>value</code> indicates time interval (in ms) of the
- * execution.
+ * Class providing utility functions for dealing with knowledge paths.
  * 
  * @author Michal Kit
  * 
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.TYPE})
-public @interface DEECoPeriodicScheduling {
-	int value() default 1000;
+public class KPBuilder {
+	public static final String PATH_DELIMITER = ".";
+
+	/**
+	 * Static function appending a new (tail) part to the existing one (root).
+	 * New instance of String object is returned.
+	 * 
+	 * @param root
+	 *            head part of the path
+	 * @param tail
+	 *            tail path of the path
+	 * @return full path
+	 */
+	public static String appendToRoot(String root, String tail) {
+		if (root == null || root.equals(""))
+			return tail;
+		if (tail == null || tail.equals(""))
+			return root;
+		return root + PATH_DELIMITER + tail;
+	}
 }

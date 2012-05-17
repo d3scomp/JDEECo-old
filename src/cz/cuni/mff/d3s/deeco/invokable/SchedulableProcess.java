@@ -1,13 +1,30 @@
+/*******************************************************************************
+ * Copyright 2012 Charles University in Prague
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package cz.cuni.mff.d3s.deeco.invokable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cz.cuni.mff.d3s.deeco.exceptions.KMException;
 import cz.cuni.mff.d3s.deeco.exceptions.KMIllegalArgumentException;
 import cz.cuni.mff.d3s.deeco.exceptions.KMNotExistentException;
 import cz.cuni.mff.d3s.deeco.knowledge.ISession;
+import cz.cuni.mff.d3s.deeco.knowledge.KMHelper;
+import cz.cuni.mff.d3s.deeco.knowledge.KPBuilder;
 import cz.cuni.mff.d3s.deeco.knowledge.KnowledgeManager;
-import cz.cuni.mff.d3s.deeco.knowledge.KnowledgePathBuilder;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessPeriodicSchedule;
 import cz.cuni.mff.d3s.deeco.scheduling.ProcessSchedule;
 
@@ -30,87 +47,41 @@ public abstract class SchedulableProcess {
 		this.km = km;
 	}
 
-	/**
-	 * Function used by the processes to retrieve all required parameters
-	 * necessary for process method execution.
-	 * 
-	 * @param in
-	 *            list of the input parameters. Those are retrieved from the
-	 *            knowledge manager.
-	 * @param out
-	 *            list of the output parameters. Those are instantiated
-	 *            according to the types and passed to the method. When the
-	 *            process method execution finishes they are stored by the
-	 *            knowledge manager.
-	 * @param inOut
-	 *            list of parameters which are both input and output. Those are
-	 *            retrieved from the knowledge manager before process execution
-	 *            and stored back when it finishes.
-	 * @param root
-	 *            knowledge level for which parameters should be retrieved or
-	 *            stored.
-	 * @return An array of parameter instances
-	 * @throws KMNotExistentException
-	 *             thrown whenever required input parameter is not available in
-	 *             the knowledge repository
-	 * @throws KMIllegalArgumentException
-	 *             thrown whenever there is type conflict between the required
-	 *             parameter and the one stored in the knowledge repository
-	 */
 	protected Object[] getParameterMethodValues(List<Parameter> in,
-			List<Parameter> out, List<Parameter> inOut, String root)
-			throws KMNotExistentException, KMIllegalArgumentException {
+			List<Parameter> inOut, List<Parameter> out, String root)
+			throws KMException {
 		return getParameterMethodValues(in, out, inOut, root, null);
 	}
-
-	/**
-	 * Function used by the processes to retrieve all required parameters
-	 * necessary for process method execution. This version is session oriented.
-	 * 
-	 * @param in
-	 *            list of the input parameters. Those are retrieved from the
-	 *            knowledge manager.
-	 * @param out
-	 *            list of the output parameters. Those are instantiated
-	 *            according to the types and passed to the method. When the
-	 *            process method execution finishes they are stored by the
-	 *            knowledge manager.
-	 * @param inOut
-	 *            list of parameters which are both input and output. Those are
-	 *            retrieved from the knowledge manager before process execution
-	 *            and stored back when it finishes.
-	 * @param root
-	 *            knowledge level for which parameters should be retrieved or
-	 *            stored.
-	 * @param session
-	 *            session instance within which all the retrieval operations
-	 *            should be performed.
-	 * @return An array of parameter instances
-	 * @throws KMNotExistentException
-	 *             thrown whenever required input parameter is not available in
-	 *             the knowledge repository
-	 * @throws KMIllegalArgumentException
-	 *             thrown whenever there is type conflict between the required
-	 *             parameter and the one stored in the knowledge repository
-	 */
+	
 	protected Object[] getParameterMethodValues(List<Parameter> in,
-			List<Parameter> out, List<Parameter> inOut, String root,
-			ISession session) throws KMNotExistentException,
-			KMIllegalArgumentException {
+			List<Parameter> inOut, List<Parameter> out, String root, Object [] target)
+			throws KMException {
+		return getParameterMethodValues(in, out, inOut, root, target, null);
+	}
+
+
+	protected Object[] getParameterMethodValues(List<Parameter> in,
+			List<Parameter> inOut, List<Parameter> out, String root, Object [] target,
+			ISession session) throws KMException {
 		ISession localSession = (session == null) ? km.createSession()
 				: session;
 		List<Parameter> parameters = new ArrayList<Parameter>();
 		parameters.addAll(in);
 		parameters.addAll(inOut);
-		Object[] result = new Object[parameters.size()
+		Object[] result;
+		if (target == null)
+			result = new Object[parameters.size()
 				+ ((out != null) ? out.size() : 0)];
+		else 
+			result = target;
 		try {
-			while (!localSession.repeat()) {
+			Parameter dp;
+			while (localSession.repeat()) {
 				localSession.begin();
-				for (Parameter dp : parameters) {
-					result[dp.index] = km.getKnowledge(
-							KnowledgePathBuilder.appendToRoot(root, dp.name),
-							dp.type, localSession);
+				for (Parameter p: parameters) {
+					result[p.index] = km.getKnowledge(
+							KPBuilder.appendToRoot(root, p.name), p.type,
+							localSession);
 
 				}
 				if (session == null)
@@ -119,12 +90,13 @@ public abstract class SchedulableProcess {
 					break;
 			}
 			parameters = out;
-			for (Parameter dp : parameters) {
-				result[dp.index] = dp.type.newInstance();
+			for (Parameter p : parameters) {
+				result[p.index] = KMHelper.getInstance(p.type);
 			}
 			return result;
-		} catch (KMIllegalArgumentException | KMNotExistentException knee) {
-			throw knee;
+		} catch (KMException kme) {
+			System.out.println("Parameter getting error!");
+			throw kme;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
@@ -145,7 +117,7 @@ public abstract class SchedulableProcess {
 	 *            knowledge level for which parameters should stored.
 	 */
 	protected void putParameterMethodValues(Object[] parameterValues,
-			List<Parameter> out, List<Parameter> inOut, String root) {
+			List<Parameter> inOut, List<Parameter> out, String root) {
 		putParameterMethodValues(parameterValues, out, inOut, root, null);
 	}
 
@@ -166,7 +138,7 @@ public abstract class SchedulableProcess {
 	 *            should be performed.
 	 */
 	protected void putParameterMethodValues(Object[] parameterValues,
-			List<Parameter> out, List<Parameter> inOut, String root,
+			List<Parameter> inOut, List<Parameter> out, String root,
 			ISession session) {
 		if (parameterValues != null) {
 			List<Parameter> parameters = new ArrayList<Parameter>();
@@ -179,13 +151,11 @@ public abstract class SchedulableProcess {
 			try {
 				while (localSession.repeat()) {
 					localSession.begin();
-					for (Parameter dp : parameters) {
-						value = parameterValues[dp.index];
-						completeName = KnowledgePathBuilder.appendToRoot(root,
-								dp.name);
-						km.takeKnowledge(completeName, value.getClass(),
+					for (Parameter p : parameters) {
+						value = parameterValues[p.index];
+						completeName = KPBuilder.appendToRoot(root, p.name);
+						km.putKnowledge(completeName, value, p.type,
 								localSession);
-						km.putKnowledge(completeName, value, localSession);
 					}
 					if (session == null)
 						localSession.end();
