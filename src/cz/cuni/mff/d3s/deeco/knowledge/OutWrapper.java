@@ -25,4 +25,21 @@ public class OutWrapper<T> {
 	public OutWrapper(T item) {
 		this.item = item;
 	}
+	
+    @Override
+    public boolean equals(Object obj) {
+         if ( this == obj ) 
+             return true;
+         if (obj == null)
+            return false;
+        if ( !(obj instanceof OutWrapper<?>) ) 
+            return false;
+        OutWrapper<?> other = (OutWrapper<?>) obj;
+        return item == null ? other.item == null : item.equals(other.item);
+    }
+
+    @Override
+    public int hashCode() {
+        return item == null ? 0 : item.hashCode();
+    }
 }
